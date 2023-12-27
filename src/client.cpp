@@ -10,8 +10,7 @@
 int main(int argc, char *argv[])
 {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0); 
-    //ipv4, tcp
-    // int sock = socket(AF_INET6, SOCK_DGRAM, 0); //ipv6, udp
+    
     sockaddr_in client_addr;
     memset(&client_addr, 0, sizeof(client_addr));
     client_addr.sin_family = AF_INET;
