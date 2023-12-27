@@ -18,6 +18,10 @@ int main(int argc, char *argv[])
 
     while(true)
     {
+        const int BUFSIZE = 1024;
+        char buff[BUFSIZE];
+        memset(buffer, 0, sizeof(buffer));
+        fgets(buff, BUFSIZE, stdin); // protect, avoid buffer overflow
         
     }
 }

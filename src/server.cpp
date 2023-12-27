@@ -25,5 +25,17 @@ int main()
     int client_sockfd = accept(sockfd, (sockaddr*)&client_addr, &client_addr_len);
 
     printf("new client fd %d! IP: %s Port: %d\n", client_sockfd, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-    return 0;
+    // return 0;
+
+    while(true)
+    {
+        const int BUFSIZE = 1024;
+        char buff[BUFSIZE];
+        memset(buffer, 0, sizeof(buffer));
+        ssize_t read_bytes = read(client_addr, buffer, sizeof(buffer));
+        if(read_bytes > 0) {
+            printf("message from client fd %d: %s\n", clnt_sockfd, buf);
+            write(client_sockfd, buf, sizeof(buf));
+        }
+    }
 }
