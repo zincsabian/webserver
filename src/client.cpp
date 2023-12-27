@@ -15,4 +15,9 @@ int main(int argc, char *argv[])
     client_addr.sin_port = htons(8888);
 
     connect(sockfd, (sockaddr*)&client_addr, sizeof(client_addr));
+
+    while(true)
+    {
+        
+    }
 }
