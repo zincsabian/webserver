@@ -2,6 +2,7 @@
 #include <arpa/inet.h>
 #include <cstring>
 #include <cstdio>
+#include <unistd.h>
 #include "utils/error.h"
 
 int main()
@@ -30,12 +31,19 @@ int main()
     while(true)
     {
         const int BUFSIZE = 1024;
-        char buff[BUFSIZE];
+        char buffer[BUFSIZE];
         memset(buffer, 0, sizeof(buffer));
-        ssize_t read_bytes = read(client_addr, buffer, sizeof(buffer));
+        ssize_t read_bytes = read(client_sockfd, buffer, sizeof(buffer));
         if(read_bytes > 0) {
-            printf("message from client fd %d: %s\n", clnt_sockfd, buf);
-            write(client_sockfd, buf, sizeof(buf));
+            printf("message from client fd %d: %s\n", client_addr, buffer);
+            write(client_sockfd, buffer, sizeof(buffer));
+        } else if(read_bytes == 0){
+            printf("client fd %d disconnected\n", client_sockfd);
+            close(client_sockfd);
+            break;
+        } else if(read_bytes == -1){
+            close(client_sockfd);
+            error_if(true, "socket read error");
         }
     }
 }

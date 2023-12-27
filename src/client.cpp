@@ -1,6 +1,10 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <cstring>
+#include <cstdio>
+#include <iostream>
+#include <string>
+#include <unistd.h>
 #include "utils/error.h"
 
 int main(int argc, char *argv[])
@@ -19,9 +23,24 @@ int main(int argc, char *argv[])
     while(true)
     {
         const int BUFSIZE = 1024;
-        char buff[BUFSIZE];
+        char buffer[BUFSIZE];
         memset(buffer, 0, sizeof(buffer));
-        fgets(buff, BUFSIZE, stdin); // protect, avoid buffer overflow
-        
+        fgets(buffer, BUFSIZE, stdin); // protect, avoid buffer overflow
+        ssize_t write_bytes = write(sockfd, buffer, sizeof(buffer));
+        if(write_bytes == -1) {
+            printf("socket already disconnected, can't write any more!\n");
+            break;
+        }
+        memset(buffer, 0, sizeof(buffer));
+        ssize_t read_bytes = read(sockfd, buffer, sizeof(buffer));
+        if(read_bytes > 0) {
+            printf("message from server: %s\n", buffer);
+        }else if(read_bytes == 0){      //read返回0，表示EOF，通常是服务器断开链接，等会儿进行测试
+            printf("server socket disconnected!\n");
+            break;
+        }else if(read_bytes == -1){     //read返回-1，表示发生错误，按照上文方法进行错误处理
+            close(sockfd);
+            error_if(true, "socket read error");
+        }
     }
 }
