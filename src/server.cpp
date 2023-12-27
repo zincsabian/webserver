@@ -10,6 +10,7 @@ int main()
     error_if(sockfd == -1, "socket create error");
 
     sockaddr_in server_addr;
+    memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     server_addr.sin_port = htons(8888);
@@ -19,7 +20,7 @@ int main()
 
     sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
-    bzero(&client_addr, sizeof(client_addr));
+    memset(&client_addr, 0, sizeof(client_addr));
 
     int client_sockfd = accept(sockfd, (sockaddr*)&client_addr, &client_addr_len);
 
