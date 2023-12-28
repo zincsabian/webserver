@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    return 0;
+    // return 0;
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     error_if(sockfd == -1, "socket create error");
 
