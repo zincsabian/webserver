@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "utils/error.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     error_if(sockfd == -1, "socket create error");
