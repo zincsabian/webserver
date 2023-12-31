@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     int client_sockfd = accept(sockfd, (sockaddr*)&client_addr, &client_addr_len);
 
     printf("new client fd %d! IP: %s Port: %d\n", client_sockfd, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-    // return 0;
+    return 0;
 
     while(true)
     {
