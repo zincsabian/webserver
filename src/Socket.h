@@ -16,8 +16,5 @@ public:
     void setnonbreaking();
     int accept(std::shared_ptr<InetAddress> addr);
     int get_fd();
-
-    //client
-    void connect(std::shared_ptr<InetAddress> addr);
 };
 #endif

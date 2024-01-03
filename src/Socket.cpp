@@ -38,7 +38,3 @@ int Socket::accept(std::shared_ptr<InetAddress> addr) {
 }
 
 int Socket::get_fd() { return fd; }
-
-void Socket::connect(std::shared_ptr<InetAddress> addr) {
-    ::connect(fd, (sockaddr*)&addr->addr, &addr->addr_len);
-}
