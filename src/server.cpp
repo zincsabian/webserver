@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
     server_sock->listen();
     std::shared_ptr<InetAddress> client_addr = std::make_shared<InetAddress>();
 
+    int sockfd = server_sock->get_fd();
+
     int epfd = epoll_create1(0);
     error_if(epfd == -1, "epoll create error");
     const int MAX_ENENTS = 1024;
