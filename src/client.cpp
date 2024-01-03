@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
-#include "utils/error.h"
+#include "util.h"
 
 int main(int argc, char *argv[])
 {
