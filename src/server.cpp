@@ -17,24 +17,12 @@ void setnonblocking(int fd){
 
 int main(int argc, char *argv[])
 {
-    // return 0;
-    // int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    // error_if(sockfd == -1, "socket create error");
-
     std::shared_ptr<Socket> server_sock = std::make_shared<Socket>();
-
-    // sockaddr_in server_addr;
-    // memset(&server_addr, 0, sizeof(server_addr));
-    // server_addr.sin_family = AF_INET;
-    // server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    // server_addr.sin_port = htons(8888);
-
     std::shared_ptr<InetAddress> server_addr = std::make_shared<InetAddress>("127.0.0.1", 8888);
+    server_sock->bind(server_addr);
+    server_sock->listen();
+    std::shared_ptr<InetAddress> client_addr = std::make_shared<InetAddress>();
 
-    error_if(bind(sockfd, (sockaddr*)&server_addr, sizeof(server_addr)) == -1, "socket bind error");
-    error_if(listen(sockfd, SOMAXCONN) == -1, "socket listen error");
-
-    //using epoll to 
     int epfd = epoll_create1(0);
     error_if(epfd == -1, "epoll create error");
     const int MAX_ENENTS = 1024;
