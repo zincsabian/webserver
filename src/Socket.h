@@ -1,16 +1,15 @@
 #ifndef SOCKET
 #define SOCKET
-#include <memory>
 #include "InetAddress.h"
+#include <memory>
 class Socket{
 private:
     int fd;
 public:
     Socket();
     Socket(int);
-    ~Socket() = default;
+    ~Socket();
 
-    //server
     void listen();
     void bind(std::shared_ptr<InetAddress> addr);
     void setnonbreaking();

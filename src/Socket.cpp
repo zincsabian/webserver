@@ -1,14 +1,16 @@
 #include "Socket.h"
 #include "util.h"
+#include "InetAddress.h"
 #include <sys/socket.h>
 #include <unistd.h>
 #include <fcntl.h>
-Socket::Socket(): fd(-1){
+
+Socket::Socket() : fd(-1){
     fd = socket(AF_INET, SOCK_STREAM, 0);
     error_if(fd == -1, "socket create error");
 }
 
-Socket::Socket(int _fd): fd(_fd){
+Socket::Socket(int _fd) : fd(_fd){
     error_if(fd == -1, "socket create error");
 }
 
