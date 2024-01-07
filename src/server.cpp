@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
     std::shared_ptr<InetAddress> server_addr = std::make_shared<InetAddress>("127.0.0.1", 8888);
     server_sock->bind(server_addr);
     server_sock->listen();
-    std::shared_ptr<InetAddress> client_addr = std::make_shared<InetAddress>();
+    server_sock->setnonbreaking();
+    // std::shared_ptr<InetAddress> client_addr = std::make_shared<InetAddress>();
 
     std::shared_ptr<Epoll> ep = std::make_shared<Epoll>();
     ep->addFd(server_sock->get_fd(), EPOLLIN);
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
                 std::shared_ptr<InetAddress> client_addr = std::make_shared<InetAddress>();
                 std::shared_ptr<Socket> client_sock = std::make_shared<Socket>(server_sock->accept(client_addr));
                 printf("new client fd %d! IP: %s Port: %d\n", client_sock->get_fd(), inet_ntoa(client_addr->addr.sin_addr), ntohs(client_addr->addr.sin_port));
+                client_sock->setnonbreaking();
                 ep->addFd(client_sock->get_fd(), EPOLLIN);
             } else if(event.events & EPOLLIN)
             {
@@ -45,6 +47,8 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+    return 0;
 }
 
 void handle_read_event(int fd)
@@ -65,7 +69,7 @@ void handle_read_event(int fd)
             printf("continue reading");
             continue;
         } else
-        if(read_bytes == -1 && (errno == EAGAIN || errno == EWOULDBLOCK))
+        if(read_bytes == -1 && ((errno == EAGAIN) || (errno == EWOULDBLOCK)))
         {
             printf("finish reading once, errno: %d\n", errno);
             break;
