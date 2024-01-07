@@ -17,11 +17,12 @@ void handle_read_event(int);
 int main(int argc, char *argv[])
 {
     std::shared_ptr<Socket> server_sock = std::make_shared<Socket>();
+    // Socket *server_sock = new Socket; 
     std::shared_ptr<InetAddress> server_addr = std::make_shared<InetAddress>("127.0.0.1", 8888);
+    // InetAddress *server_addr = new InetAddress;
     server_sock->bind(server_addr);
     server_sock->listen();
     server_sock->setnonbreaking();
-    // std::shared_ptr<InetAddress> client_addr = std::make_shared<InetAddress>();
 
     std::shared_ptr<Epoll> ep = std::make_shared<Epoll>();
     ep->addFd(server_sock->get_fd(), EPOLLIN);
