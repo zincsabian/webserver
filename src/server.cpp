@@ -14,7 +14,6 @@ void setnonblocking(int fd){
 
 int main(int argc, char *argv[])
 {
-    // return 0;
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     error_if(sockfd == -1, "socket create error");
 
@@ -30,6 +29,7 @@ int main(int argc, char *argv[])
     //using epoll to 
     int epfd = epoll_create1(0);
     error_if(epfd == -1, "epoll create error");
+
     const int MAX_ENENTS = 1024;
     epoll_event events[MAX_ENENTS], ev;
     memset(events, 0, sizeof(events));
@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
                 sockaddr_in client_addr;
                 memset(&client_addr, 0, sizeof(client_addr));
                 socklen_t client_addr_len = sizeof(client_addr);
+
                 int client_sockfd = accept(sockfd, (sockaddr*)&client_sockfd, &client_addr_len);
                 error_if(client_sockfd == -1, "socket accept error");
                 printf("new client fd %d! IP: %s Port: %d\n", client_addr, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
                 ev.data.fd = client_sockfd;
                 ev.events = EPOLLIN;
                 setnonblocking(client_sockfd);
-                epoll_ctl(epfd, EPOLL_CTL_ADD, sockfd, &ev);
+                epoll_ctl(epfd, EPOLL_CTL_ADD, client_sockfd, &ev);
             } else if(events[i].events & EPOLLIN)
             {
                 const int BUFSIZE = 1024;
