@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
                 memset(&client_addr, 0, sizeof(client_addr));
                 socklen_t client_addr_len = sizeof(client_addr);
 
-                int client_sockfd = accept(sockfd, (sockaddr*)&client_sockfd, &client_addr_len);
+                int client_sockfd = accept(sockfd, (sockaddr*)&client_addr, &client_addr_len);
                 error_if(client_sockfd == -1, "socket accept error");
                 printf("new client fd %d! IP: %s Port: %d\n", client_addr, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
           
