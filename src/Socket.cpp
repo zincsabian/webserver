@@ -25,7 +25,7 @@ void Socket::listen() {
     error_if(::listen(fd, SOMAXCONN) == -1, "socket listen error");
 }
 
-void Socket::bind(std::shared_ptr<InetAddress> addr) {
+void Socket::bind(InetAddress* addr) {
     error_if(::bind(fd, (sockaddr*)&addr->addr, addr->addr_len) == -1, "socket bind error");
 }
 
@@ -33,7 +33,7 @@ void Socket::setnonbreaking() {
     fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
 }
 
-int Socket::accept(std::shared_ptr<InetAddress> addr) {
+int Socket::accept(InetAddress* addr) {
     int client_sockfd = ::accept(fd, (sockaddr*)&addr->addr, &addr->addr_len);
     error_if(client_sockfd == -1, "socket accept error");
     return client_sockfd;

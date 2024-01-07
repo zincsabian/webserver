@@ -16,15 +16,13 @@ void handle_read_event(int);
 
 int main(int argc, char *argv[])
 {
-    std::shared_ptr<Socket> server_sock = std::make_shared<Socket>();
-    // Socket *server_sock = new Socket; 
-    std::shared_ptr<InetAddress> server_addr = std::make_shared<InetAddress>("127.0.0.1", 8888);
-    // InetAddress *server_addr = new InetAddress;
+    Socket *server_sock = new Socket(); 
+    InetAddress *server_addr = new InetAddress("127.0.0.1", 8888);
     server_sock->bind(server_addr);
     server_sock->listen();
     server_sock->setnonbreaking();
 
-    std::shared_ptr<Epoll> ep = std::make_shared<Epoll>();
+    Epoll* ep = new Epoll;
     ep->addFd(server_sock->get_fd(), EPOLLIN);
 
     while(true)
@@ -34,13 +32,14 @@ int main(int argc, char *argv[])
         {
             if(event.data.fd == server_sock->get_fd()) //accept connection
             {
-                std::shared_ptr<InetAddress> client_addr = std::make_shared<InetAddress>();
-                std::shared_ptr<Socket> client_sock = std::make_shared<Socket>(server_sock->accept(client_addr));
+                InetAddress* client_addr = new InetAddress();
+                Socket* client_sock = new Socket(server_sock->accept(client_addr));
                 printf("new client fd %d! IP: %s Port: %d\n", client_sock->get_fd(), inet_ntoa(client_addr->addr.sin_addr), ntohs(client_addr->addr.sin_port));
                 client_sock->setnonbreaking();
                 ep->addFd(client_sock->get_fd(), EPOLLIN);
             } else if(event.events & EPOLLIN)
             {
+                printf("rcv msg from fd: %d", event.data.fd);
                 handle_read_event(event.data.fd);
             } else 
             {
@@ -48,7 +47,9 @@ int main(int argc, char *argv[])
             }
         }
     }
-
+    delete server_sock;
+    delete server_addr;
+    delete ep;
     return 0;
 }
 

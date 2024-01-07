@@ -8,7 +8,7 @@ class Epoll{
 private:
     static int MAX_ENENTS;
     int epfd;
-    std::shared_ptr<epoll_event> epoll_events;
+    epoll_event* epoll_events;
 public:
     Epoll();
     ~Epoll();
