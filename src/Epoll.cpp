@@ -29,9 +29,10 @@ void Epoll::addFd(int fd, uint32_t op)
 {
     epoll_event ev;
     memset(&ev, 0, sizeof(ev));
-    ev.events = EPOLLIN; //using LT model
+    ev.events = op; //using LT model
     ev.data.fd = fd;
-    error_if(epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev) == -1, "epoll add event error");
+    ssize_t status = epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev);
+    error_if(status == -1, "epoll add event error");
 }
 
 std::vector<epoll_event> Epoll::poll(int timeout) 
