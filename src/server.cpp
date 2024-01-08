@@ -16,13 +16,13 @@ void handle_read_event(int);
 
 int main(int argc, char *argv[])
 {
-    Socket *server_sock = new Socket(); 
-    InetAddress *server_addr = new InetAddress("127.0.0.1", 8888);
-    server_sock->bind(server_addr);
+    std::shared_ptr<Socket> server_sock = std::make_shared<Socket>(); 
+    std::shared_ptr<InetAddress> server_addr = std::make_shared<InetAddress>("127.0.0.1", 8888);
+    server_sock->bind(server_addr.get());
     server_sock->listen();
     server_sock->setnonbreaking();
 
-    Epoll* ep = new Epoll;
+    std::shared_ptr<Epoll> ep = std::make_shared<Epoll>();
     ep->addFd(server_sock->get_fd(), EPOLLIN);
 
     while(true)
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
                 ep->addFd(client_sock->get_fd(), EPOLLIN);
             } else if(event.events & EPOLLIN)
             {
-                printf("rcv msg from fd: %d", event.data.fd);
+                printf("rcv msg from fd: %d\n", event.data.fd);
                 handle_read_event(event.data.fd);
             } else 
             {
@@ -47,9 +47,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-    delete server_sock;
-    delete server_addr;
-    delete ep;
     return 0;
 }
 

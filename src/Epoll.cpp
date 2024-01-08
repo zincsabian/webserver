@@ -20,6 +20,7 @@ Epoll::~Epoll()
     if(epfd != -1) 
     {
         close(epfd);
+        delete[] epoll_events;
         epfd = -1;
     }
 }
