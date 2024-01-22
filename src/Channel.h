@@ -10,7 +10,7 @@ public:
     void enableReading();
     uint32_t getEvents();
     bool getInEpoll();
-    bool setInEpoll();
+    void setInEpoll();
 private:
     Epoll *ep;
     int fd;

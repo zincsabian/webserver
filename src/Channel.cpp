@@ -1,6 +1,8 @@
 #include "Channel.h"
 #include "Epoll.h"
 
+Channel::Channel(Epoll* _ep, int _fd): ep(_ep), fd(_fd), inEpoll(false) {}
+
 void Channel::enableReading()
 {
     events = EPOLLIN;
