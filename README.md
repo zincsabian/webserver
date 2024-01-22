@@ -1,6 +1,10 @@
 # webserver
 ## description
    a web server made by cpp
+## processing
+   1. \[done\] use epoll in server to manage all fd from clients
+   2. \[done\] use shared_ptr to manage
+   3. \[doing\] adding test to confirm the currectness
 
 ## reference
    [30day make cpp server](https://github.com/yuesong-feng/30dayMakeCppServer) 
