@@ -1,5 +1,6 @@
 #include "Epoll.h"
 #include "util.h"
+#include "Channel.h"
 #include <sys/epoll.h>
 #include <unistd.h>
 #include <cstring>
@@ -45,4 +46,23 @@ std::vector<epoll_event> Epoll::poll(int timeout)
         atvfd.push_back(epoll_events[i]);
     }
     return atvfd;
+}
+
+void Epoll::updateChannel(Channel* channel)
+{
+    int fd = channel->getfd();
+    epoll_event ev;
+    memset(&ev, 0, sizeof(ev));
+    ev.data.ptr = channel;
+    ev.events = channel->getEvents();
+    if(!channel->getInEpoll()) 
+    {
+        ssize_t epoll_status = epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev);
+        error_if(epoll_status == -1, "epoll add error");
+        channel->setInEpoll();
+    }else 
+    {
+        ssize_t epoll_status = epoll_ctl(epfd, EPOLL_CTL_MOD, fd, &ev);
+        error_if(epoll_status == -1, "epoll add error");
+    }
 }

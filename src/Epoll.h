@@ -4,6 +4,7 @@
 #include <memory>
 #include <sys/epoll.h>
 
+class Channel;
 class Epoll{
 private:
     static int MAX_ENENTS;
@@ -13,6 +14,7 @@ public:
     Epoll();
     ~Epoll();
     void addFd(int fd, uint32_t op);
+    void updateChannel(Channel* channel);
     std::vector<epoll_event> poll(int time_out = -1);
 };
 #endif
